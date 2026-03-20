@@ -1,9 +1,14 @@
 package practice;
 
+import java.util.Arrays;
 import java.util.function.Predicate;
 import model.Candidate;
 
 public class CandidateValidator implements Predicate<Candidate> {
+
+    private static final int MIN_AGE = 35;
+    private static final int MIN_YEARS = 10;
+    private static final String NATIONALITY_UKRAINIAN = "Ukrainian";
 
     @Override
     public boolean test(Candidate candidate) {
@@ -11,8 +16,8 @@ public class CandidateValidator implements Predicate<Candidate> {
             return false;
         }
 
-        // age (35 is allowed)
-        if (candidate.getAge() < 35) {
+        // age
+        if (candidate.getAge() < MIN_AGE) {
             return false;
         }
 
@@ -23,7 +28,7 @@ public class CandidateValidator implements Predicate<Candidate> {
 
         // nationality
         String nationality = candidate.getNationality();
-        if (nationality == null || !"Ukrainian".equalsIgnoreCase(nationality.trim())) {
+        if (nationality == null || !NATIONALITY_UKRAINIAN.equalsIgnoreCase(nationality.trim())) {
             return false;
         }
 
@@ -35,25 +40,24 @@ public class CandidateValidator implements Predicate<Candidate> {
 
         String[] ranges = periods.split(",");
 
-        int totalYears = 0;
+        int totalYears = Arrays.stream(ranges)
+                .mapToInt(range -> {
+                    try {
+                        String[] years = range.trim().split("-");
+                        if (years.length != 2) {
+                            return 0;
+                        }
 
-        for (String range : ranges) {
-            try {
-                String[] years = range.trim().split("-");
-                if (years.length != 2) {
-                    continue;
-                }
+                        int start = Integer.parseInt(years[0].trim());
+                        int end = Integer.parseInt(years[1].trim());
 
-                int start = Integer.parseInt(years[0].trim());
-                int end = Integer.parseInt(years[1].trim());
+                        return end - start + 1;
+                    } catch (NumberFormatException e) {
+                        return 0;
+                    }
+                })
+                .sum();
 
-                totalYears += (end - start + 1);
-
-            } catch (NumberFormatException e) {
-                // ignore invalid ranges
-            }
-        }
-
-        return totalYears >= 10;
+        return totalYears >= MIN_YEARS;
     }
 }
