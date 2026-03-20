@@ -22,7 +22,8 @@ public class CandidateValidator implements Predicate<Candidate> {
         }
 
         // warunek 3: narodowość
-        if (!"Ukrainian".equals(candidate.getNationality())) {
+        if (candidate.getNationality() == null
+                || !"Ukrainian".equals(candidate.getNationality().trim())) {
             return false;
         }
 
