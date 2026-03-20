@@ -28,18 +28,13 @@ public class CandidateValidator implements Predicate<Candidate> {
             return false;
         }
 
-        int totalYears = 0;
+        // wyciągamy TYLKO lata (pierwsze i ostatnie 4 cyfry)
+        String startYearStr = periods.substring(0, 4);
+        String endYearStr = periods.substring(periods.length() - 4);
 
-        String[] ranges = periods.split(",");
+        int start = Integer.parseInt(startYearStr);
+        int end = Integer.parseInt(endYearStr);
 
-        for (String range : ranges) {
-            String[] years = range.split("-");
-            int start = Integer.parseInt(years[0]);
-            int end = Integer.parseInt(years[1]);
-
-            totalYears += (end - start + 1); // ← KLUCZ
-        }
-
-        return totalYears >= 10;
+        return (end - start) >= 10;
     }
 }
