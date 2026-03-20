@@ -15,12 +15,12 @@ public class CandidateValidator implements Predicate<Candidate> {
             return false;
         }
 
-        if (candidate.getNationality() == null
-                || !"Ukrainian".equalsIgnoreCase(candidate.getNationality().trim())) {
+        if (!candidate.isAllowedToVote()) {
             return false;
         }
 
-        if (!candidate.isAllowedToVote()) {
+        if (candidate.getNationality() == null
+                || !"Ukrainian".equals(candidate.getNationality().trim())) {
             return false;
         }
 
@@ -33,6 +33,6 @@ public class CandidateValidator implements Predicate<Candidate> {
         int start = Integer.parseInt(years[0].trim());
         int end = Integer.parseInt(years[1].trim());
 
-        return (end - start) >= 10;
+        return (end - start + 1) >= 10;
     }
 }
