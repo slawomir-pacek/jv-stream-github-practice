@@ -29,11 +29,9 @@ public class CandidateValidator implements Predicate<Candidate> {
         }
 
         String[] years = periods.split("-");
-        int start = Integer.parseInt(years[0]);
-        int end = Integer.parseInt(years[1]);
+        int start = Integer.parseInt(years[0].trim());
+        int end = Integer.parseInt(years[1].trim());
 
-        int currentYear = java.time.LocalDate.now().getYear();
-
-        return (end - start) >= 10 && end >= currentYear;
+        return (end - start) >= 10;
     }
 }
