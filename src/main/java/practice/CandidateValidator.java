@@ -11,12 +11,12 @@ public class CandidateValidator implements Predicate<Candidate> {
             return false;
         }
 
-        // age
-        if (candidate.getAge() <= 35) {
+        // age (35 is allowed)
+        if (candidate.getAge() < 35) {
             return false;
         }
 
-        // voting
+        // voting right
         if (!candidate.isAllowedToVote()) {
             return false;
         }
@@ -29,19 +29,31 @@ public class CandidateValidator implements Predicate<Candidate> {
 
         // periods
         String periods = candidate.getPeriodsInUkr();
-        if (periods == null || !periods.contains("-")) {
+        if (periods == null || periods.isBlank()) {
             return false;
         }
 
-        String[] years = periods.split("-");
-        if (years.length != 2) {
-            return false;
+        String[] ranges = periods.split(",");
+
+        int totalYears = 0;
+
+        for (String range : ranges) {
+            try {
+                String[] years = range.trim().split("-");
+                if (years.length != 2) {
+                    continue;
+                }
+
+                int start = Integer.parseInt(years[0].trim());
+                int end = Integer.parseInt(years[1].trim());
+
+                totalYears += (end - start + 1);
+
+            } catch (NumberFormatException e) {
+                // ignore invalid ranges
+            }
         }
 
-        int start = Integer.parseInt(years[0].trim());
-        int end = Integer.parseInt(years[1].trim());
-
-        // at least 10 years
-        return (end - start) >= 10;
+        return totalYears >= 10;
     }
 }
