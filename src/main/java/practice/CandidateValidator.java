@@ -20,7 +20,7 @@ public class CandidateValidator implements Predicate<Candidate> {
         }
 
         if (candidate.getNationality() == null
-                || !"Ukrainian".equals(candidate.getNationality().trim())) {
+                || !"Ukrainian".equalsIgnoreCase(candidate.getNationality().trim())) {
             return false;
         }
 
