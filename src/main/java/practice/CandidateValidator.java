@@ -15,11 +15,12 @@ public class CandidateValidator implements Predicate<Candidate> {
             return false;
         }
 
-        if (!candidate.isAllowedToVote()) {
+        if (candidate.getNationality() == null
+                || !"Ukrainian".equalsIgnoreCase(candidate.getNationality().trim())) {
             return false;
         }
 
-        if (!"Ukrainian".equals(candidate.getNationality())) {
+        if (!candidate.isAllowedToVote()) {
             return false;
         }
 
