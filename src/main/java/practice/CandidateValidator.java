@@ -19,20 +19,27 @@ public class CandidateValidator implements Predicate<Candidate> {
             return false;
         }
 
-        if (candidate.getNationality() == null
-                || !"Ukrainian".equals(candidate.getNationality())) {
+        if (!"Ukrainian".equals(candidate.getNationality())) {
             return false;
         }
 
         String periods = candidate.getPeriodsInUkr();
-        if (periods == null || !periods.contains("-")) {
+        if (periods == null || periods.isEmpty()) {
             return false;
         }
 
-        String[] years = periods.split("-");
-        int start = Integer.parseInt(years[0]);
-        int end = Integer.parseInt(years[1]);
+        int totalYears = 0;
 
-        return (end - start + 1) >= 10;
+        String[] ranges = periods.split(",");
+
+        for (String range : ranges) {
+            String[] years = range.split("-");
+            int start = Integer.parseInt(years[0]);
+            int end = Integer.parseInt(years[1]);
+
+            totalYears += (end - start + 1); // ← KLUCZ
+        }
+
+        return totalYears >= 10;
     }
 }
