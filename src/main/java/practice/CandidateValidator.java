@@ -33,6 +33,6 @@ public class CandidateValidator implements Predicate<Candidate> {
         int start = Integer.parseInt(years[0].trim());
         int end = Integer.parseInt(years[1].trim());
 
-        return (end - start + 1) >= 10;
+        return (end - start) >= 10;
     }
 }
