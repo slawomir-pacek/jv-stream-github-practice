@@ -11,32 +11,36 @@ public class CandidateValidator implements Predicate<Candidate> {
             return false;
         }
 
-        // warunek 1: wiek
         if (candidate.getAge() <= 35) {
             return false;
         }
 
-        // warunek 2: prawo do głosowania
         if (!candidate.isAllowedToVote()) {
             return false;
         }
 
-        // warunek 3: narodowość
         if (candidate.getNationality() == null
                 || !"Ukrainian".equals(candidate.getNationality().trim())) {
             return false;
         }
 
-        // warunek 4: lata w Ukrainie
         String periods = candidate.getPeriodsInUkr();
-        if (periods == null || !periods.contains("-")) {
+        if (periods == null || periods.isEmpty()) {
             return false;
         }
 
-        String[] years = periods.split("-");
-        int start = Integer.parseInt(years[0].trim());
-        int end = Integer.parseInt(years[1].trim());
+        int totalYears = 0;
 
-        return (end - start + 1) >= 10;
+        String[] ranges = periods.split(",");
+
+        for (String range : ranges) {
+            String[] years = range.split("-");
+            int start = Integer.parseInt(years[0].trim());
+            int end = Integer.parseInt(years[1].trim());
+
+            totalYears += (end - start);
+        }
+
+        return totalYears >= 10;
     }
 }
