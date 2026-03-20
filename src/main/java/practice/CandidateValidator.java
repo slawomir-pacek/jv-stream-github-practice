@@ -24,17 +24,16 @@ public class CandidateValidator implements Predicate<Candidate> {
         }
 
         String periods = candidate.getPeriodsInUkr();
-        if (periods == null || periods.isEmpty()) {
+        if (periods == null || !periods.contains("-")) {
             return false;
         }
 
-        // wyciągamy TYLKO lata (pierwsze i ostatnie 4 cyfry)
-        String startYearStr = periods.substring(0, 4);
-        String endYearStr = periods.substring(periods.length() - 4);
+        String[] years = periods.split("-");
+        int start = Integer.parseInt(years[0]);
+        int end = Integer.parseInt(years[1]);
 
-        int start = Integer.parseInt(startYearStr);
-        int end = Integer.parseInt(endYearStr);
+        int currentYear = java.time.LocalDate.now().getYear();
 
-        return (end - start) >= 10;
+        return (end - start) >= 10 && end >= currentYear;
     }
 }
