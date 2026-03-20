@@ -33,8 +33,8 @@ public class CandidateValidator implements Predicate<Candidate> {
         }
 
         String[] years = periods.split("-");
-        int start = Integer.parseInt(years[0]);
-        int end = Integer.parseInt(years[1]);
+        int start = Integer.parseInt(years[0].trim());
+        int end = Integer.parseInt(years[1].trim());
 
         return (end - start + 1) >= 10;
     }
